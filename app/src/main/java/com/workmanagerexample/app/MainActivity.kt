@@ -1,5 +1,8 @@
 package com.workmanagerexample.app
 
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.Data
@@ -8,6 +11,9 @@ import androidx.work.*
 
 
 class MainActivity : AppCompatActivity() {
+
+    var actionCom: String = "com.workmanagerexample.app.action.COM"
+    var alarmMessage: String = "BroadcastResiverCOM"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val myWorkRequest =
             OneTimeWorkRequest.Builder(MyWorker::class.java)
-                        .setInitialDelay(10, java.util.concurrent.TimeUnit.SECONDS)
+//                .setInitialDelay(10, java.util.concurrent.TimeUnit.SECONDS)
                 .setInputData(myData)
                 .build()
 //                PeriodicWorkRequest.Builder(MyWorker::class.java, 5, java.util.concurrent.TimeUnit.SECONDS)
@@ -28,9 +34,9 @@ class MainActivity : AppCompatActivity() {
 //                        .build()
         WorkManager.getInstance().enqueue(myWorkRequest)
 
-        WorkManager.getInstance().getWorkInfoByIdLiveData(myWorkRequest.id).observe(this, {
-            println("!!!!!!!!!!!!!!!" + it.state)
-            println("**************" + it.outputData.getString("keyC"))
-        })
+//        WorkManager.getInstance().getWorkInfoByIdLiveData(myWorkRequest.id).observe(this, {
+//            println("!!!!!!!!!!!!!!!" + it.state)
+//            println("**************" + it.outputData.getString("keyC"))
+//        })
     }
 }
