@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "203890374789",
+    "project_id": "workmanagerexample-e6ccb",
+    "storage_bucket": "workmanagerexample-e6ccb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203890374789:android:d986b98d0d5d92f2c411ec",
+        "android_client_info": {
+          "package_name": "com.workmanagerexample.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203890374789-0mj2b5ko5p0snbcd2ihueqnjb3fegs3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5HcD4iZhyZAC_9xtJcoCo49mTmhpP28U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203890374789-0mj2b5ko5p0snbcd2ihueqnjb3fegs3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

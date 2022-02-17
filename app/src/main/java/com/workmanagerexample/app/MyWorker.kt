@@ -15,8 +15,6 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
 
     override fun doWork(): Result {
 
-        println("DO WORK !!!!!!!!!!!!!!!!!!!!!!")
-
         val valueA = inputData.getString("keyA")
         val valueB = inputData.getInt("keyB", 0)
 
@@ -46,6 +44,4 @@ class MyWorker(context: Context, workerParams: WorkerParameters) : Worker(contex
         }
 
     }
-
-
 }
