@@ -3,13 +3,16 @@ package com.workmanagerexample.app
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.work.Data
 import androidx.work.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.workmanagerexample.app.databinding.ActivityMainBinding
-
+import org.w3c.dom.Document
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,59 +21,78 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userList: List<MyUsers>
+    private var userList: MutableList<MyUsers> = mutableListOf()
     private lateinit var userAdapter: UserAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
-
-        loadUser()
-        val db = Firebase.firestore
-        val testListUser = mutableListOf<MyUsers>()
+        setContentView(binding.root)
 
         userAdapter = UserAdapter(userList)
         binding.list.adapter = userAdapter
 
-//        var userAdapter: UserAdapter = UserAdapter(testListUser)
+        val s = getString(R.string.welcome_messages, "sasha")
+        binding.textView.text = s
 
-//        binding.list.adapter = userAdapter
+        val db = Firebase.firestore
 
-//        binding.buttonSave.setOnClickListener(View.OnClickListener {
-//            db.collection("users")
-//                .add(
-//                    MyUsers(
-//                        binding.editTextTextFirstName.text.toString(),
-//                        binding.editTextTextLastName.text.toString(),
-//                        binding.editTextTextBorn.text.toString().toInt()
-//                    )
-//                )
-//                .addOnSuccessListener { documentReference ->
-//                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-//                }
-//                .addOnFailureListener { e ->
-//                    Log.w(TAG, "Error adding document", e)
-//                }
-//        })
+        binding.buttonSave.setOnClickListener(View.OnClickListener {
+            db.collection("users").document("1")
+                .set(
+                    mapOf(
+                        "id" to db.collection("users").document().id,
+                        "first" to binding.editTextTextFirstName.text.toString(),
+                        "last" to binding.editTextTextLastName.text.toString(),
+                        "born" to binding.editTextTextBorn.text.toString().toInt()
+                    )
+                )
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }
+        })
 
 
         //READ DATA FIRESTORE
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { result ->
-                var mutableListUsers: MutableList<MyUsers> = mutableListOf()
+        db.collection("users").document("1")
+            .addSnapshotListener { snapshot, e ->
 
-                for (document in result) {
-                    mutableListUsers.add(document?.toObject(MyUsers::class.java)!!)
-                    Log.d(TAG, "${document.id} => ${document.data}")
+                val mutableListUsers: MutableList<MyUsers> = mutableListOf()
+
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e)
+                    return@addSnapshotListener
                 }
-                println("!!!!!!" + mutableListUsers)
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "Current data: ${snapshot.data}")
+                    println("!!!!!!" + snapshot.toObject(MyUsers::class.java))
+                    mutableListUsers.add(snapshot?.toObject(MyUsers::class.java)!!)
+
+                } else {
+                    Log.d(TAG, "Current data: null")
+                    if (e != null) {
+                        println("@@@@@@" + e.message)
+                    }
+                }
+                userAdapter.addData(mutableListUsers)
+            }
+//            .get()
+//            .addOnSuccessListener { result ->
+//                val mutableListUsers: MutableList<MyUsers> = mutableListOf()
+//
+//                for (document in result) {
+//                    mutableListUsers.add(document?.toObject(MyUsers::class.java)!!)
+//                    Log.d(TAG, "${document.id} => ${document.data}")
+//                }
 //                userAdapter.addData(mutableListUsers)
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-            }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w(TAG, "Error getting documents.", exception)
+//            }
 
         val myData: Data = Data.Builder()
             .putString("keyA", "value777777777")
@@ -92,13 +114,4 @@ class MainActivity : AppCompatActivity() {
 //            println("**************" + it.outputData.getString("keyC"))
 //        })
     }
-
-    private fun loadUser() {
-        userList = listOf(
-            MyUsers("Vlad", "Wardon", 18),
-            MyUsers("Boris", "Holov", 25),
-            MyUsers("Nana", "Urid", 35),
-        )
-    }
-
 }

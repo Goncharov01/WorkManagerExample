@@ -14,7 +14,7 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                 context, "Обнаружено сообщение: " +
                         intent?.getStringExtra("com.workmanagerexample.app.broadcast.Message"),
                 Toast.LENGTH_LONG
-            ).show();
+            ).show()
         }
     }
 }

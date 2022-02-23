@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WorkManagerExample</string>
+    <string name="name">
+        <ul>
+        <li><b><font color = "red" >qwerty</font></b></li> \n <li><i>qwerty</i></li>
+        </ul>
+    </string>
+    <string name="welcome_messages">Hello, %1$s! You have new messages.</string>
 </resources>

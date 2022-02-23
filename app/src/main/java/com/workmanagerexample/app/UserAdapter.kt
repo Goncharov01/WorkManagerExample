@@ -5,30 +5,28 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.workmanagerexample.app.databinding.UserBinding
 
-class UserAdapter(
-    var userList: List<MyUsers>,
-) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class UserAdapter(var listUser: MutableList<MyUsers>) : RecyclerView.Adapter<UserViewHolder>() {
 
-    inner class ViewHolder(val binding: UserBinding) : RecyclerView.ViewHolder(binding.root)
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding = UserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return ViewHolder(binding)
+        return UserViewHolder(binding)
     }
 
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            with(userList[position]) {
-                binding.textFirstName.text = this.first
-                binding.textLastName.text = this.last
-                binding.textBorn.text = this.born.toString()
-            }
-        }
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        val user: MyUsers = listUser[position]
+        holder.binding.textFirstName.text = user.first
+        holder.binding.textLastName.text = user.last
+        holder.binding.textBorn.text = user.born.toString()
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return listUser.size
     }
+
+    fun addData(list: MutableList<MyUsers>) {
+        listUser.clear()
+        listUser.addAll(list)
+        notifyDataSetChanged()
+    }
+
 }
